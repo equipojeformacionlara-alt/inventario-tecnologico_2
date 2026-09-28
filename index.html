@@ -1,160 +1,204 @@
 <!DOCTYPE html>
 <html lang="es">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Registro de Inventario Tecnológico</title>
-<style>
-body{font-family:Arial,sans-serif;background:#f4f7f6;margin:0;padding:20px}
-.container{max-width:650px;background:#fff;padding:25px;border-radius:8px;box-shadow:0 4px 10px rgba(0,0,0,.1);margin:auto}
-h2{text-align:center;color:#333;margin-bottom:20px}
-label{font-weight:bold;display:block;margin-top:12px;color:#444}
-select,input{width:100%;padding:10px;margin-top:5px;border:1px solid #ccc;border-radius:4px;box-sizing:border-box;font-size:14px}
-.seccion-general{background:#e9ecef;padding:15px;border-radius:6px;margin-bottom:15px;border-left:4px solid #007bff}
-button{background:#007bff;color:#fff;border:none;padding:12px;width:100%;border-radius:4px;font-size:16px;cursor:pointer;margin-top:20px}
-button:hover{background:#0056b3}button:disabled{background:#8fb8e8;cursor:wait}
-.seccion{display:none}.activa{display:block}
-</style>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Registro de Inventario Tecnológico</title>
+    <style>
+        body { font-family: Arial, sans-serif; background-color: #f4f7f6; margin: 0; padding: 20px; }
+        .container { max-width: 650px; background: #ffffff; padding: 25px; border-radius: 8px; box-shadow: 0px 4px 10px rgba(0,0,0,0.1); margin: auto; }
+        h2 { text-align: center; color: #333; margin-bottom: 20px; }
+        label { font-weight: bold; display: block; margin-top: 12px; color: #444; }
+        select, input, textarea { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ccc; border-radius: 4px; box-sizing: border-box; font-size: 14px; }
+        .seccion-general { background-color: #e9ecef; padding: 15px; border-radius: 6px; margin-bottom: 15px; border-left: 4px solid #007bff; }
+        button { background-color: #007bff; color: white; border: none; padding: 12px; width: 100%; border-radius: 4px; font-size: 16px; cursor: pointer; margin-top: 20px; }
+        button:hover { background-color: #0056b3; }
+        .seccion { display: none; }
+        .activa { display: block; }
+    </style>
 </head>
 <body>
+
 <div class="container">
-<h2>Registro de Inventario Tecnológico</h2>
-<form id="formInventario" autocomplete="off">
+    <h2>Registro de Inventario Tecnológico</h2>
+    
+    <form id="formInventario">
+        <!-- CAMPOS GENERALES AL INICIO -->
+        <div class="seccion-general">
+            <label>Cliente / Empresa:</label>
+            <input type="text" name="cliente" required placeholder="Ej: Bancaribe / GADISYS">
 
-<div class="seccion-general">
-  <label>Cliente / Empresa:</label>
-  <input type="text" name="cliente" required placeholder="Ej: Bancaribe / GADISYS">
-  <label>Región:</label>
-  <input type="text" name="region" required placeholder="Ej: Centro-Occidental, Capital">
-  <label>Agencia / Sede:</label>
-  <input type="text" name="agencia" required placeholder="Ej: Agencia Barquisimeto Este">
-</div>
+            <label>Región:</label>
+            <input type="text" name="region" required placeholder="Ej: Centro-Occidental, Capital">
 
-<label for="tipoFormulario">Seleccione el Tipo de Registro:</label>
-<select id="tipoFormulario" onchange="cambiarFormulario(true)">
-  <option value="equipo">Parte 1: Inventario de Equipos (CPU's)</option>
-  <option value="periferico">Parte 2: Periféricos / Componentes</option>
-</select>
+            <label>Agencia / Sede:</label>
+            <input type="text" name="agencia" required placeholder="Ej: Agencia Barquisimeto Este">
+        </div>
 
-<!-- ===== EQUIPOS: mismo orden que la hoja "Inventario CPU's" ===== -->
-<div id="seccionEquipo" class="seccion activa">
-  <label>Serial:</label>
-  <input type="text" name="serial" required>
-  <label>Código Patrimonial (Etiqueta de Activo):</label>
-  <input type="text" name="codigoPatrimonial">
-  <label>HostName (Nombre de PC):</label>
-  <input type="text" name="hostName">
-  <label>Tipo:</label>
-  <select name="tipo"><option>Laptop</option><option>Desktop</option><option>Tablet</option></select>
-  <label>Marca:</label>
-  <input type="text" name="marca">
-  <label>Modelo:</label>
-  <input type="text" name="modelo">
-  <label>Estado Físico:</label>
-  <select name="estadoFisico"><option>Excelente</option><option>Bueno</option><option>Regular</option><option>Deteriorado</option></select>
-  <label>ID de Ubicación (código de oficina):</label>
-  <input type="text" name="idUbicacion" placeholder="Ej: CP08, P8">
-  <label>Puesto de Trabajo:</label>
-  <input type="text" name="puestoTrabajo" placeholder="Ej: P06-043, Gerente de Negocios">
-  <label>ID de Usuario (BC del usuario):</label>
-  <input type="text" name="idUsuario">
-  <label>Nombre de Usuario:</label>
-  <input type="text" name="nombreUsuario">
-  <label>Monitor:</label>
-  <select name="monitor"><option>Sí</option><option>No</option></select>
-  <label>Marca de Monitor:</label>
-  <input type="text" name="marcaMonitor" placeholder="Dejar vacío si no tiene">
-  <label>Mouse:</label>
-  <select name="mouse"><option>Sí</option><option>No</option></select>
-  <label>Teclado:</label>
-  <select name="teclado"><option>Sí</option><option>No</option></select>
-</div>
+        <label for="tipoFormulario">Seleccione el Tipo de Registro:</label>
+        <select id="tipoFormulario" onchange="cambiarFormulario()">
+            <option value="equipo">Parte 1: Inventario de Equipos (Principal)</option>
+            <option value="periferico">Parte 2: Periféricos / Componentes</option>
+        </select>
 
-<!-- ===== PERIFÉRICOS: mismo orden que la hoja "Inventario Perifericos" ===== -->
-<div id="seccionPeriferico" class="seccion">
-  <label>Serial:</label>
-  <input type="text" name="serial" required>
-  <label>Código Patrimonial (Etiqueta de Activo):</label>
-  <input type="text" name="codigoPatrimonial">
-  <label>Componente:</label>
-  <input type="text" name="componente" placeholder="Ej: Impresora, Microfilm, Contadora, Lectora">
-  <label>HostName (equipo al cual está conectado):</label>
-  <input type="text" name="hostNameConectado">
-  <label>Tipo:</label>
-  <input type="text" name="tipo">
-  <label>Marca:</label>
-  <input type="text" name="marca">
-  <label>Modelo:</label>
-  <input type="text" name="modelo">
-  <label>Estado Físico:</label>
-  <select name="estadoFisico"><option>Excelente</option><option>Bueno</option><option>Regular</option><option>Deteriorado</option></select>
-  <label>ID de Ubicación (código de oficina):</label>
-  <input type="text" name="idUbicacion">
-  <label>ID de Usuario (BC del usuario):</label>
-  <input type="text" name="idUsuario">
-  <label>Nombre de Usuario:</label>
-  <input type="text" name="nombreUsuario">
-</div>
+        <!-- SECCIÓN EQUIPOS -->
+        <div id="seccionEquipo" class="seccion activa">
+            <label>Serial:</label>
+            <input type="text" name="serial" required>
 
-<button type="submit" id="btnGuardar">Guardar en Base de Datos</button>
-</form>
+            <label>Código Patrimonial (Bien Nacional):</label>
+            <input type="text" name="codigoPatrimonial">
+
+            <label>HostName (Nombre de Red):</label>
+            <input type="text" name="hostName">
+
+            <label>Tipo de Equipo:</label>
+            <select name="tipo">
+                <option value="Laptop">Laptop</option>
+                <option value="Desktop">Desktop</option>
+                <option value="Tablet">Tablet</option>
+            </select>
+
+            <label>Marca:</label>
+            <input type="text" name="marca">
+
+            <label>Modelo:</label>
+            <input type="text" name="modelo">
+
+            <label>Estado Físico:</label>
+            <select name="estadoFisico">
+                <option value="Bueno">Bueno</option>
+                <option value="Regular">Regular</option>
+                <option value="Malo">Malo</option>
+                <option value="Desincorporado">Desincorporado</option>
+            </select>
+
+            <label>ID de Ubicación:</label>
+            <input type="text" name="idUbicacion">
+
+            <label>Puesto de Trabajo:</label>
+            <input type="text" name="puestoTrabajo">
+
+            <label>ID de Usuario:</label>
+            <input type="text" name="idUsuario">
+
+            <label>Nombre de Usuario:</label>
+            <input type="text" name="nombreUsuario">
+
+            <label>¿Posee Monitor?</label>
+            <select name="monitor">
+                <option value="Sí">Sí</option>
+                <option value="No">No</option>
+            </select>
+
+            <label>Marca de Monitor:</label>
+            <input type="text" name="marcaMonitor">
+
+            <label>Mouse:</label>
+            <input type="text" name="mouse" placeholder="Marca / Estado">
+
+            <label>Teclado:</label>
+            <input type="text" name="teclado" placeholder="Marca / Estado">
+        </div>
+
+        <!-- SECCIÓN PERIFÉRICOS -->
+        <div id="seccionPeriferico" class="seccion">
+            <label>Serial:</label>
+            <input type="text" name="serial">
+
+            <label>Código Patrimonial (Bien Nacional):</label>
+            <input type="text" name="codigoPatrimonial">
+
+            <label>Componente / Periférico:</label>
+            <input type="text" name="componente" placeholder="Ej: Impresora, Switch, Router">
+
+            <label>HostName Conectado (Equipo Asociado):</label>
+            <input type="text" name="hostNameConectado">
+
+            <label>Tipo:</label>
+            <input type="text" name="tipo">
+
+            <label>Marca:</label>
+            <input type="text" name="marca">
+
+            <label>Modelo:</label>
+            <input type="text" name="modelo">
+
+            <label>Estado Físico:</label>
+            <select name="estadoFisico">
+                <option value="Bueno">Bueno</option>
+                <option value="Regular">Regular</option>
+                <option value="Malo">Malo</option>
+            </select>
+
+            <label>ID de Ubicación:</label>
+            <input type="text" name="idUbicacion">
+
+            <label>ID de Usuario:</label>
+            <input type="text" name="idUsuario">
+
+            <label>Nombre de Usuario:</label>
+            <input type="text" name="nombreUsuario">
+        </div>
+
+        <button type="submit" id="btnGuardar">Guardar en Base de Datos</button>
+    </form>
 </div>
 
 <script>
-const scriptURL = 'https://script.google.com/macros/s/AKfycbwN19vWSING10j4M8h1jumDa_eoVRsKw5zo9-elY8QsRCy7mdAl01-Zyjh1PU2JVbPd/exec
+    const scriptURL = 'https://script.google.com/macros/s/AKfycbwN19vWSING10j4M8h1jumDa_eoVRsKw5zo9-elY8QsRCy7mdAl01-Zyjh1PU2JVbPd/exec';
 
-';
-const form = document.getElementById('formInventario');
-const boton = document.getElementById('btnGuardar');
+    function cambiarFormulario() {
+        var tipo = document.getElementById('tipoFormulario').value;
+        var secEquipo = document.getElementById('seccionEquipo');
+        var secPeriferico = document.getElementById('seccionPeriferico');
 
-// Activa una sección, DESHABILITA la otra (no se envía ni valida)
-// y limpia los campos de la sección que se muestra para que nunca aparezca con datos del otro tipo.
-function cambiarFormulario(limpiar) {
-  const esEquipo = document.getElementById('tipoFormulario').value === 'equipo';
-  [['seccionEquipo', esEquipo], ['seccionPeriferico', !esEquipo]].forEach(([id, activa]) => {
-    const sec = document.getElementById(id);
-    sec.classList.toggle('activa', activa);
-    sec.querySelectorAll('input,select').forEach(el => {
-      el.disabled = !activa;
-      if (limpiar) { if (el.tagName === 'SELECT') el.selectedIndex = 0; else el.value = ''; }
+        if (tipo === 'equipo') {
+            secEquipo.classList.add('activa');
+            secPeriferico.classList.remove('activa');
+        } else {
+            secPeriferico.classList.add('activa');
+            secEquipo.classList.remove('activa');
+        }
+    }
+
+    const form = document.getElementById('formInventario');
+    form.addEventListener('submit', e => {
+        e.preventDefault();
+        
+        let boton = document.getElementById('btnGuardar');
+        boton.disabled = true;
+        boton.textContent = 'Guardando...';
+
+        let formData = new FormData(form);
+        let data = {};
+        
+        formData.forEach((value, key) => {
+            data[key] = value;
+        });
+        
+        data.tipoFormulario = document.getElementById('tipoFormulario').value;
+
+        fetch(scriptURL, { 
+            method: 'POST', 
+            mode: 'no-cors',
+            body: JSON.stringify(data)
+        })
+        .then(() => {
+            alert('¡Registro guardado con éxito!');
+            form.reset();
+            cambiarFormulario();
+            boton.disabled = false;
+            boton.textContent = 'Guardar en Base de Datos';
+        })
+        .catch(error => {
+            console.error('Error!', error.message);
+            alert('Hubo un error al guardar. Intente de nuevo.');
+            boton.disabled = false;
+            boton.textContent = 'Guardar en Base de Datos';
+        });
     });
-  });
-}
-cambiarFormulario();
-
-form.addEventListener('submit', async e => {
-  e.preventDefault();
-  boton.disabled = true;
-  boton.textContent = 'Guardando...';
-
-  const data = {};
-  new FormData(form).forEach((v, k) => data[k] = v.trim());
-  data.tipoFormulario = document.getElementById('tipoFormulario').value;
-
-  try {
-    // no-cors + text/plain: envío fiable hacia Apps Script (la respuesta no es legible)
-    await fetch(scriptURL, {
-      method: 'POST',
-      mode: 'no-cors',
-      headers: { 'Content-Type': 'text/plain;charset=utf-8' },
-      body: JSON.stringify(data)
-    });
-
-    alert('¡Registro enviado! Verifique en Google Sheets.');
-    // Conserva Cliente/Región/Agencia y el tipo de registro para cargar el siguiente
-    const keep = {cliente: data.cliente, region: data.region, agencia: data.agencia, tf: data.tipoFormulario};
-    form.reset();
-    form.cliente.value = keep.cliente; form.region.value = keep.region; form.agencia.value = keep.agencia;
-    document.getElementById('tipoFormulario').value = keep.tf;
-    cambiarFormulario(false);
-  } catch (err) {
-    console.error(err);
-    alert('Hubo un error al guardar: ' + err.message);
-  } finally {
-    boton.disabled = false;
-    boton.textContent = 'Guardar en Base de Datos';
-  }
-});
 </script>
+
 </body>
 </html>
