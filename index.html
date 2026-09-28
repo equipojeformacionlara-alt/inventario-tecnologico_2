@@ -19,7 +19,7 @@ button:hover{background:#0056b3}button:disabled{background:#8fb8e8;cursor:wait}
 <body>
 <div class="container">
 <h2>Registro de Inventario Tecnológico</h2>
-<form id="formInventario">
+<form id="formInventario" autocomplete="off">
 
 <div class="seccion-general">
   <label>Cliente / Empresa:</label>
@@ -31,7 +31,7 @@ button:hover{background:#0056b3}button:disabled{background:#8fb8e8;cursor:wait}
 </div>
 
 <label for="tipoFormulario">Seleccione el Tipo de Registro:</label>
-<select id="tipoFormulario" onchange="cambiarFormulario()">
+<select id="tipoFormulario" onchange="cambiarFormulario(true)">
   <option value="equipo">Parte 1: Inventario de Equipos (CPU's)</option>
   <option value="periferico">Parte 2: Periféricos / Componentes</option>
 </select>
@@ -101,20 +101,21 @@ button:hover{background:#0056b3}button:disabled{background:#8fb8e8;cursor:wait}
 </div>
 
 <script>
-const scriptURL = 'https://script.google.com/macros/s/AKfycbwN19vWSING10j4M8h1jumDa_eoVRsKw5zo9-elY8QsRCy7mdAl01-Zyjh1PU2JVbPd/exec
-
-';
+const scriptURL = 'https://script.google.com/macros/s/AKfycbwcY-v5c6iZ13UEOQmaZqiSwAowL936CnNPomgf0Bo0llS3xc5XsBHy18hyfUHuEDLrGw/exec';
 const form = document.getElementById('formInventario');
 const boton = document.getElementById('btnGuardar');
 
-// Activa una sección y DESHABILITA los campos de la otra:
-// los campos deshabilitados no se envían ni bloquean el "required".
-function cambiarFormulario() {
+// Activa una sección, DESHABILITA la otra (no se envía ni valida)
+// y limpia los campos de la sección que se muestra para que nunca aparezca con datos del otro tipo.
+function cambiarFormulario(limpiar) {
   const esEquipo = document.getElementById('tipoFormulario').value === 'equipo';
   [['seccionEquipo', esEquipo], ['seccionPeriferico', !esEquipo]].forEach(([id, activa]) => {
     const sec = document.getElementById(id);
     sec.classList.toggle('activa', activa);
-    sec.querySelectorAll('input,select').forEach(el => el.disabled = !activa);
+    sec.querySelectorAll('input,select').forEach(el => {
+      el.disabled = !activa;
+      if (limpiar) { if (el.tagName === 'SELECT') el.selectedIndex = 0; else el.value = ''; }
+    });
   });
 }
 cambiarFormulario();
@@ -129,22 +130,21 @@ form.addEventListener('submit', async e => {
   data.tipoFormulario = document.getElementById('tipoFormulario').value;
 
   try {
-    // text/plain evita el preflight CORS de Apps Script
-    const res = await fetch(scriptURL, {
+    // no-cors + text/plain: envío fiable hacia Apps Script (la respuesta no es legible)
+    await fetch(scriptURL, {
       method: 'POST',
+      mode: 'no-cors',
       headers: { 'Content-Type': 'text/plain;charset=utf-8' },
       body: JSON.stringify(data)
     });
-    const r = await res.json();
-    if (!r.ok) throw new Error(r.error || 'Error desconocido');
 
-    alert('¡Registro guardado con éxito!');
-    // Conserva Cliente/Región/Agencia y el tipo de registro para cargar el siguiente equipo
+    alert('¡Registro enviado! Verifique en Google Sheets.');
+    // Conserva Cliente/Región/Agencia y el tipo de registro para cargar el siguiente
     const keep = {cliente: data.cliente, region: data.region, agencia: data.agencia, tf: data.tipoFormulario};
     form.reset();
     form.cliente.value = keep.cliente; form.region.value = keep.region; form.agencia.value = keep.agencia;
     document.getElementById('tipoFormulario').value = keep.tf;
-    cambiarFormulario();
+    cambiarFormulario(false);
   } catch (err) {
     console.error(err);
     alert('Hubo un error al guardar: ' + err.message);
